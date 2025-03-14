@@ -22,7 +22,7 @@ allowing seamless integration of Discord Bot with MCP-compatible applications li
 
 #### Clone the repository
 ```
-git clone https://github.com/SaseQ/invoice-manager
+git clone https://github.com/SaseQ/discord-mcp
 ```
 
 #### Build the project
@@ -55,7 +55,7 @@ mvn clean package
 ## 🛠️ Available Tools
 
 #### Message Management
- - [`send_message`](): Send a message to a channel
+ - [`send_message`](): Send a message to a specific channel
 
 <hr>
 
