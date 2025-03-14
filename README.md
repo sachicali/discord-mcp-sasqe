@@ -56,7 +56,7 @@ mvn clean package
 
 Install Discord MCP Server automatically via Smithery:
 ```
-npx -y @smithery/cli@latest inspect @SaseQ/discord-mcp
+npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 ```
 
 
