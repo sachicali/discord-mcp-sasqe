@@ -1,0 +1,14 @@
+# Smithery.ai configuration
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - discordToken
+    properties:
+      discordToken:
+        type: string
+        description: The bot token for Discord integration.
+  commandFunction:
+    |-
+    config => ({command: 'java', args: ['-jar', './target/discord-mcp-0.0.1-SNAPSHOT.jar'], env: {DISCORD_TOKEN: config.discordToken}})
