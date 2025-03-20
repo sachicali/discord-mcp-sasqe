@@ -69,6 +69,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`send_message`](): Send a message to a specific channel
  - [`read_message`](): Read recent message history from a specific channel
  - [`send_private_message`](): Send a private message to a specific user
+ - [`read_private_message`](): Read recent message history from a specific user
 
 <hr>
 

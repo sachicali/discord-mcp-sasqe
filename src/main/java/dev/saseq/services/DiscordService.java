@@ -93,14 +93,7 @@ public class DiscordService {
         }
 
         List<Message> messages = textChannelById.getHistory().retrievePast(limit).complete();
-        List<String> formatedMessages = messages.stream()
-                .map(m -> {
-                    String authorName = m.getAuthor().getName();
-                    String timestamp = m.getTimeCreated().toString();
-                    String content = m.getContentDisplay();
-
-                    return String.format("- **[%s]** `%s`: ```%s```", authorName, timestamp, content);
-                }).toList();
+        List<String> formatedMessages = formatMessages(messages);
 
         return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
@@ -115,12 +108,7 @@ public class DiscordService {
             throw new IllegalArgumentException("message cannot be null");
         }
 
-        User user = jda.getGuilds().stream()
-                .map(guild -> guild.retrieveMemberById(userId).complete())
-                .filter(Objects::nonNull)
-                .map(Member::getUser)
-                .findFirst()
-                .orElse(null);
+        User user = getUserById(userId);
 
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
@@ -128,5 +116,47 @@ public class DiscordService {
 
         Message sentMessage = user.openPrivateChannel().complete().sendMessage(message).complete();
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
+    }
+
+    @Tool(name = "read_private_message",description = "Read recent message history from a specific user")
+    public String readMessageFromPrivateUser(@ToolParam(description = "Discord user ID") String userId,
+                                             @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("userId cannot be null");
+        }
+        int limit = 100;
+        if (count != null) {
+            limit = Integer.parseInt(count);
+        }
+
+        User user = getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found by userId");
+        }
+
+        List<Message> messages = user.openPrivateChannel().complete().getHistory().retrievePast(limit).complete();
+        List<String> formatedMessages = formatMessages(messages);
+
+        return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
+    }
+
+    private User getUserById(String userId) {
+        return jda.getGuilds().stream()
+                .map(guild -> guild.retrieveMemberById(userId).complete())
+                .filter(Objects::nonNull)
+                .map(Member::getUser)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private List<String> formatMessages(List<Message> messages) {
+        return messages.stream()
+                .map(m -> {
+                    String authorName = m.getAuthor().getName();
+                    String timestamp = m.getTimeCreated().toString();
+                    String content = m.getContentDisplay();
+
+                    return String.format("- **[%s]** `%s`: ```%s```", authorName, timestamp, content);
+                }).toList();
     }
 }
