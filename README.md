@@ -62,6 +62,9 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 ## 🛠️ Available Tools
 
+#### Server Information
+ - [`get_server_info`](): Get detailed discord server information
+
 #### Message Management
  - [`send_message`](): Send a message to a specific channel
  - [`send_private_message`](): Send a private message to a specific user
