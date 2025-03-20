@@ -35,7 +35,7 @@ mvn clean package
 ```
 {
   "mcpServers": {
-    "bitcoin-mcp-server": {
+    "discord-mcp": {
       "command": "java",
       "args": [
         "-jar",
@@ -64,6 +64,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 #### Message Management
  - [`send_message`](): Send a message to a specific channel
+ - [`send_private_message`](): Send a private message to a specific user
 
 <hr>
 

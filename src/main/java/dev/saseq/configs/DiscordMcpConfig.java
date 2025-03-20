@@ -3,6 +3,7 @@ package dev.saseq.configs;
 import dev.saseq.services.DiscordService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,8 @@ public class DiscordMcpConfig {
             System.err.println("ERROR: The environment variable DISCORD_TOKEN is not set. Please set it to run the application properly.");
             System.exit(1);
         }
-        return JDABuilder.createDefault(token).build();
+        return JDABuilder.createDefault(token)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .build();
     }
 }
