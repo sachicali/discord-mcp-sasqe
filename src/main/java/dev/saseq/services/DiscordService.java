@@ -10,6 +10,7 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -73,6 +74,35 @@ public class DiscordService {
         }
         Message sentMessage = textChannelById.sendMessage(message).complete();
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
+    }
+
+    @Tool(name = "read_messages",description = "Read recent message history from a specific channel")
+    public String readMessageFromDiscordChannel(@ToolParam(description = "Discord channel ID") String channelId,
+                                                @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        int limit = 100;
+        if (count != null) {
+            limit = Integer.parseInt(count);
+        }
+
+        TextChannel textChannelById = jda.getTextChannelById(channelId);
+        if (textChannelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+
+        List<Message> messages = textChannelById.getHistory().retrievePast(limit).complete();
+        List<String> formatedMessages = messages.stream()
+                .map(m -> {
+                    String authorName = m.getAuthor().getName();
+                    String timestamp = m.getTimeCreated().toString();
+                    String content = m.getContentDisplay();
+
+                    return String.format("- **[%s]** `%s`: ```%s```", authorName, timestamp, content);
+                }).toList();
+
+        return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
 
     @Tool(name = "send_private_message",description = "Send a private message to a specific user")
