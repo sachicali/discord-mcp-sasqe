@@ -10,8 +10,10 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class DiscordService {
@@ -21,7 +23,7 @@ public class DiscordService {
         this.jda = jda;
     }
 
-    @Tool(name = "get_server_info",description = "Get detailed discord server information")
+    @Tool(name = "get_server_info", description = "Get detailed discord server information")
     public String getServerInfo(@ToolParam(description = "Discord server ID") String guildId) {
         if (guildId == null || guildId.isEmpty()) {
             throw new IllegalArgumentException("Discord server ID cannot be null");
@@ -58,7 +60,7 @@ public class DiscordService {
                 " - Tier: " + boostTier;
     }
 
-    @Tool(name = "send_message",description = "Send a message to a specific channel")
+    @Tool(name = "send_message", description = "Send a message to a specific channel")
     public String sendMessageToDiscordChannel(@ToolParam(description = "Message content") String message,
                                               @ToolParam(description = "Discord channel ID") String channelId) {
         if (channelId == null || channelId.isEmpty()) {
@@ -76,7 +78,7 @@ public class DiscordService {
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
     }
 
-    @Tool(name = "read_messages",description = "Read recent message history from a specific channel")
+    @Tool(name = "read_messages", description = "Read recent message history from a specific channel")
     public String readMessageFromDiscordChannel(@ToolParam(description = "Discord channel ID") String channelId,
                                                 @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
         if (channelId == null || channelId.isEmpty()) {
@@ -98,7 +100,7 @@ public class DiscordService {
         return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
 
-    @Tool(name = "send_private_message",description = "Send a private message to a specific user")
+    @Tool(name = "send_private_message", description = "Send a private message to a specific user")
     public String sendMessageToPrivateUser(@ToolParam(description = "Message content") String message,
                                            @ToolParam(description = "Discord user ID") String userId) {
         if (userId == null || userId.isEmpty()) {
@@ -118,7 +120,7 @@ public class DiscordService {
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
     }
 
-    @Tool(name = "read_private_message",description = "Read recent message history from a specific user")
+    @Tool(name = "read_private_message", description = "Read recent message history from a specific user")
     public String readMessageFromPrivateUser(@ToolParam(description = "Discord user ID") String userId,
                                              @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
         if (userId == null || userId.isEmpty()) {
@@ -158,5 +160,37 @@ public class DiscordService {
 
                     return String.format("- **[%s]** `%s`: ```%s```", authorName, timestamp, content);
                 }).toList();
+    }
+
+
+    @Tool(name = "find_text_channel", description = "Find a text channel (name or link) using an ID or name")
+    public String findTextChannel(@ToolParam(description = "Discord channel identifier (ID or Name)") String channelIdentifier) {
+        if (channelIdentifier == null || channelIdentifier.isEmpty()) {
+            throw new IllegalArgumentException("channelIdentifier cannot be null");
+        }
+
+        List<TextChannel> textChannels;
+        TextChannel channelById = jda.getTextChannelById(channelIdentifier);
+
+        if (channelById != null) {
+            textChannels = Collections.singletonList(channelById);
+        } else {
+            textChannels = jda.getTextChannelsByName(channelIdentifier, true);
+        }
+
+        if (textChannels.isEmpty()) {
+            throw new IllegalArgumentException("Channel " + channelIdentifier + " not found");
+        }
+        if (textChannels.size() > 1) {
+            String channelList = textChannels.stream()
+                    .map(c -> "**" + c.getName() + "** - `" + c.getId() + "`")
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Multiple channels found with name " + channelIdentifier + ".\n" +
+                    "List: " + channelList + ".\nPlease specify the channel ID.");
+        }
+
+        TextChannel responseTextChannel = textChannels.get(0);
+        return "Retrieved " + responseTextChannel.getName() + " text channel, with ID " +
+                responseTextChannel.getId() + ". Link: " + responseTextChannel.getJumpUrl();
     }
 }

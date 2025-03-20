@@ -71,6 +71,9 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`send_private_message`](): Send a private message to a specific user
  - [`read_private_message`](): Read recent message history from a specific user
 
+#### Channel Management
+ - [`find_text_channel`](): Find a text channel (name or link) using an ID or name
+
 <hr>
 
 A more detailed examples can be found in the [Wiki](https://github.com/SaseQ/discord-mcp/wiki).
