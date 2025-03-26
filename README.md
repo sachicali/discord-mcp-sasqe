@@ -27,7 +27,7 @@ git clone https://github.com/SaseQ/discord-mcp
 
 #### Build the project
 ```
-cd invoice-manager
+cd discord-mcp
 mvn clean package
 ```
 
