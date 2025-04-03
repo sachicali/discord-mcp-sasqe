@@ -70,6 +70,8 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`read_message`](): Read recent message history from a specific channel
  - [`send_private_message`](): Send a private message to a specific user
  - [`read_private_message`](): Read recent message history from a specific user
+ - [`add_reaction`](): Add a reaction (emoji) to a specific message
+ - [`remove_reaction`](): Remove a specified reaction (emoji) from a message
 
 #### Channel Management
  - [`find_text_channel`](): Find a text channel (name or link) using an ID or name

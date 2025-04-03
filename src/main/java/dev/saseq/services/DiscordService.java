@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
@@ -162,6 +163,59 @@ public class DiscordService {
                 }).toList();
     }
 
+    @Tool(name = "add_reaction", description = "Add a reaction (emoji) to a specific message")
+    public String addReaction(@ToolParam(description = "Discord channel ID") String channelId,
+                              @ToolParam(description = "Discord message ID") String messageId,
+                              @ToolParam(description = "Emoji (Unicode or string)") String emoji) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+        if (emoji == null || emoji.isEmpty()) {
+            throw new IllegalArgumentException("emoji cannot be null");
+        }
+
+        TextChannel textChannelById = jda.getTextChannelById(channelId);
+        if (textChannelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        Message message = textChannelById.retrieveMessageById(messageId).complete();
+        if (message == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+
+        message.addReaction(Emoji.fromUnicode(emoji)).queue();
+        return "Added reaction successfully. Message link: " + message.getJumpUrl();
+    }
+
+    @Tool(name = "remove_reaction", description = "Remove a specified reaction (emoji) from a message")
+    public String removeReaction(@ToolParam(description = "Discord channel ID") String channelId,
+                                 @ToolParam(description = "Discord message ID") String messageId,
+                                 @ToolParam(description = "Emoji (Unicode or string)") String emoji) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+        if (emoji == null || emoji.isEmpty()) {
+            throw new IllegalArgumentException("emoji cannot be null");
+        }
+
+        TextChannel textChannelById = jda.getTextChannelById(channelId);
+        if (textChannelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        Message message = textChannelById.retrieveMessageById(messageId).complete();
+        if (message == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+
+        message.removeReaction(Emoji.fromUnicode(emoji)).queue();
+        return "Added reaction successfully. Message link: " + message.getJumpUrl();
+    }
 
     @Tool(name = "find_text_channel", description = "Find a text channel (name or link) using an ID or name")
     public String findTextChannel(@ToolParam(description = "Discord channel identifier (ID or Name)") String channelIdentifier) {
