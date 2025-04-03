@@ -101,7 +101,7 @@ public class DiscordService {
         return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
 
-    @Tool(name = "send_private_message", description = "Send a private message to a specific user")
+    @Tool(name = "send_private_messages", description = "Send a private message to a specific user")
     public String sendMessageToPrivateUser(@ToolParam(description = "Message content") String message,
                                            @ToolParam(description = "Discord user ID") String userId) {
         if (userId == null || userId.isEmpty()) {
@@ -158,8 +158,9 @@ public class DiscordService {
                     String authorName = m.getAuthor().getName();
                     String timestamp = m.getTimeCreated().toString();
                     String content = m.getContentDisplay();
+                    String messageId = m.getId();
 
-                    return String.format("- **[%s]** `%s`: ```%s```", authorName, timestamp, content);
+                    return String.format("- (ID: %s) **[%s]** `%s`: ```%s```", messageId, authorName, timestamp, content);
                 }).toList();
     }
 
