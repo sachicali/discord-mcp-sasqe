@@ -80,6 +80,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`create_webhook`](): Create a new webhook on a specific channel
  - [`delete_webhook`](): Delete a webhook
  - [`list_webhooks`](): List of webhooks on a specific channel
+ - [`send_webhook_message`](): Send a message via webhook
 
 
 <hr>

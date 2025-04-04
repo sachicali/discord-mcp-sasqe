@@ -301,4 +301,22 @@ public class DiscordService {
                 .map(w -> String.format("- (ID: %s) **[%s]** ```%s```", w.getId(), w.getName(), w.getUrl()))
                 .toList();
     }
+
+    @Tool(name = "send_webhook_message", description = "Send a message via webhook")
+    public String sendWebhookMessage(@ToolParam(description = "Discord webhook link") String webhookUrl,
+                                     @ToolParam(description = "Message content") String message) {
+        if (webhookUrl == null || webhookUrl.isEmpty()) {
+            throw new IllegalArgumentException("webhookUrl cannot be null");
+        }
+        if (message == null || message.isEmpty()) {
+            throw new IllegalArgumentException("message cannot be null");
+        }
+
+        IncomingWebhookClient webhookClient = WebhookClient.createClient(jda, webhookUrl);
+        if (webhookClient == null) {
+            throw new IllegalArgumentException("Webhook not found by webhookUrl");
+        }
+        Message sentMessage = webhookClient.sendMessage(message).complete();
+        return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
+    }
 }
