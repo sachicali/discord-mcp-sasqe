@@ -1,10 +1,7 @@
 package dev.saseq.services;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.springframework.ai.tool.annotation.Tool;
@@ -247,5 +244,61 @@ public class DiscordService {
         TextChannel responseTextChannel = textChannels.get(0);
         return "Retrieved " + responseTextChannel.getName() + " text channel, with ID " +
                 responseTextChannel.getId() + ". Link: " + responseTextChannel.getJumpUrl();
+    }
+
+    @Tool(name = "create_webhook", description = "Create a new webhook on a specific channel")
+    public String createWebhook(@ToolParam(description = "Discord channel ID") String channelId,
+                                @ToolParam(description = "Webhook name") String name) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("webhook name cannot be null");
+        }
+
+        TextChannel channelById = jda.getTextChannelById(channelId);
+        if (channelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        Webhook webhook = channelById.createWebhook(name).complete();
+        return "Created " + name + " webhook: " + webhook.getUrl();
+    }
+
+    @Tool(name = "delete_webhook", description = "Delete a webhook")
+    public String deleteWebhook(@ToolParam(description = "Discord webhook ID") String webhookId) {
+        if (webhookId == null || webhookId.isEmpty()) {
+            throw new IllegalArgumentException("webhookId cannot be null");
+        }
+
+        Webhook webhook = jda.retrieveWebhookById(webhookId).complete();
+        if (webhook == null) {
+            throw new IllegalArgumentException("Webhook not found by webhookId");
+        }
+        webhook.delete().queue();
+        return "Deleted " + webhook.getName() + " webhook";
+    }
+
+    @Tool(name = "list_webhooks", description = "List of webhooks on a specific channel")
+    public String listWebhooks(@ToolParam(description = "Discord channel ID") String channelId) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+
+        TextChannel channelById = jda.getTextChannelById(channelId);
+        if (channelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        List<Webhook> webhooks = channelById.retrieveWebhooks().complete();
+        if (webhooks.isEmpty()) {
+            throw new IllegalArgumentException("No webhooks found");
+        }
+        List<String> formattedWebhooks = formatWebhooks(webhooks);
+        return "**Retrieved " + formattedWebhooks.size() + " messages:** \n" + String.join("\n", formattedWebhooks);
+    }
+
+    private List<String> formatWebhooks(List<Webhook> webhooks) {
+        return webhooks.stream()
+                .map(w -> String.format("- (ID: %s) **[%s]** ```%s```", w.getId(), w.getName(), w.getUrl()))
+                .toList();
     }
 }

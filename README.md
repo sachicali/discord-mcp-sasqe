@@ -76,6 +76,12 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 #### Channel Management
  - [`find_text_channel`](): Find a text channel (name or link) using an ID or name
 
+#### Webhook Management
+ - [`create_webhook`](): Create a new webhook on a specific channel
+ - [`delete_webhook`](): Delete a webhook
+ - [`list_webhooks`](): List of webhooks on a specific channel
+
+
 <hr>
 
 A more detailed examples can be found in the [Wiki](https://github.com/SaseQ/discord-mcp/wiki).
