@@ -92,7 +92,7 @@ public class DiscordService {
         if (textChannelById == null) {
             throw new IllegalArgumentException("Channel not found by channelId");
         }
-        Message messageById = textChannelById.getHistory().getMessageById(messageId);
+        Message messageById = textChannelById.retrieveMessageById(messageId).complete();
         if (messageById == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
@@ -114,7 +114,7 @@ public class DiscordService {
         if (textChannelById == null) {
             throw new IllegalArgumentException("Channel not found by channelId");
         }
-        Message messageById = textChannelById.getHistory().getMessageById(messageId);
+        Message messageById = textChannelById.retrieveMessageById(messageId).complete();
         if (messageById == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
@@ -178,7 +178,7 @@ public class DiscordService {
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
-        Message messageById = user.openPrivateChannel().complete().getHistory().getMessageById(messageId);
+        Message messageById = user.openPrivateChannel().complete().retrieveMessageById(messageId).complete();
         if (messageById == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
@@ -200,7 +200,7 @@ public class DiscordService {
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
-        Message messageById = user.openPrivateChannel().complete().getHistory().getMessageById(messageId);
+        Message messageById = user.openPrivateChannel().complete().retrieveMessageById(messageId).complete();
         if (messageById == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
