@@ -100,6 +100,28 @@ public class DiscordService {
         return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
     }
 
+    @Tool(name = "delete_message", description = "Delete a message from a specific channel")
+    public String deleteMessage(@ToolParam(description = "Discord channel ID") String channelId,
+                                @ToolParam(description = "Specific message ID") String messageId) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+
+        TextChannel textChannelById = jda.getTextChannelById(channelId);
+        if (textChannelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        Message messageById = textChannelById.getHistory().getMessageById(messageId);
+        if (messageById == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+        messageById.delete().queue();
+        return "Message deleted successfully";
+    }
+
     @Tool(name = "read_messages", description = "Read recent message history from a specific channel")
     public String readMessages(@ToolParam(description = "Discord channel ID") String channelId,
                                @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
@@ -162,6 +184,28 @@ public class DiscordService {
         }
         Message editedMessage = messageById.editMessage(newMessage).complete();
         return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
+    }
+
+    @Tool(name = "delete_private_message", description = "Delete a private message from a specific user")
+    public String deletePrivateMessage(@ToolParam(description = "Discord user ID") String userId,
+                                       @ToolParam(description = "Specific message ID") String messageId) {
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("userId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+
+        User user = getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found by userId");
+        }
+        Message messageById = user.openPrivateChannel().complete().getHistory().getMessageById(messageId);
+        if (messageById == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+        messageById.delete().queue();
+        return "Message deleted successfully";
     }
 
     @Tool(name = "read_private_messages", description = "Read recent message history from a specific user")
