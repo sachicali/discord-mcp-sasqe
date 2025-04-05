@@ -67,8 +67,10 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 #### Message Management
  - [`send_message`](): Send a message to a specific channel
+ - [`edit_message`](): Edit a message from a specific channel
  - [`read_messages`](): Read recent message history from a specific channel
  - [`send_private_message`](): Send a private message to a specific user
+ - [`edit_private_message`](): Edit a private message from a specific user
  - [`read_private_messages`](): Read recent message history from a specific user
  - [`add_reaction`](): Add a reaction (emoji) to a specific message
  - [`remove_reaction`](): Remove a specified reaction (emoji) from a message

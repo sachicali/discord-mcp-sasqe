@@ -76,6 +76,32 @@ public class DiscordService {
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
     }
 
+    @Tool(name = "edit_message", description = "Edit a message from a specific channel")
+    public String editMessage(@ToolParam(description = "Discord channel ID") String channelId,
+                              @ToolParam(description = "Specific message ID") String messageId,
+                              @ToolParam(description = "New message content") String newMessage) {
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+        if (newMessage == null || newMessage.isEmpty()) {
+            throw new IllegalArgumentException("newMessage cannot be null");
+        }
+
+        TextChannel textChannelById = jda.getTextChannelById(channelId);
+        if (textChannelById == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        Message messageById = textChannelById.getHistory().getMessageById(messageId);
+        if (messageById == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+        Message editedMessage = messageById.editMessage(newMessage).complete();
+        return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
+    }
+
     @Tool(name = "read_messages", description = "Read recent message history from a specific channel")
     public String readMessageFromDiscordChannel(@ToolParam(description = "Discord channel ID") String channelId,
                                                 @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
@@ -116,6 +142,32 @@ public class DiscordService {
 
         Message sentMessage = user.openPrivateChannel().complete().sendMessage(message).complete();
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
+    }
+
+    @Tool(name = "edit_private_message", description = "Edit a private message from a specific user")
+    public String editPrivateMessage(@ToolParam(description = "Discord user ID") String userId,
+                                     @ToolParam(description = "Specific message ID") String messageId,
+                                     @ToolParam(description = "New message content") String newMessage) {
+        if (userId == null || userId.isEmpty()) {
+            throw new IllegalArgumentException("userId cannot be null");
+        }
+        if (messageId == null || messageId.isEmpty()) {
+            throw new IllegalArgumentException("messageId cannot be null");
+        }
+        if (newMessage == null || newMessage.isEmpty()) {
+            throw new IllegalArgumentException("newMessage cannot be null");
+        }
+
+        User user = getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found by userId");
+        }
+        Message messageById = user.openPrivateChannel().complete().getHistory().getMessageById(messageId);
+        if (messageById == null) {
+            throw new IllegalArgumentException("Message not found by messageId");
+        }
+        Message editedMessage = messageById.editMessage(newMessage).complete();
+        return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
     }
 
     @Tool(name = "read_private_message", description = "Read recent message history from a specific user")
