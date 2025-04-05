@@ -29,9 +29,8 @@ public class DiscordService {
 
         Guild guild = jda.getGuildById(guildId);
         if (guild == null) {
-            throw new IllegalArgumentException("Discord server ID: " + guildId + " not found");
+            throw new IllegalArgumentException("Discord server not found by guildId");
         }
-
         String serverName = guild.getName();
         String serverId = guild.getId();
         Member owner = guild.retrieveOwner().complete();
@@ -40,7 +39,6 @@ public class DiscordService {
         int voiceChannelCount = guild.getVoiceChannels().size();
         int categoryCount = guild.getCategories().size();
         String creationDate = guild.getTimeCreated().toLocalDate().toString();
-
         int boostCount = guild.getBoostCount();
         String boostTier = guild.getBoostTier().toString();
 
@@ -59,8 +57,8 @@ public class DiscordService {
     }
 
     @Tool(name = "send_message", description = "Send a message to a specific channel")
-    public String sendMessageToDiscordChannel(@ToolParam(description = "Message content") String message,
-                                              @ToolParam(description = "Discord channel ID") String channelId) {
+    public String sendMessage(@ToolParam(description = "Discord channel ID") String channelId,
+                              @ToolParam(description = "Message content") String message) {
         if (channelId == null || channelId.isEmpty()) {
             throw new IllegalArgumentException("channelId cannot be null");
         }
@@ -103,8 +101,8 @@ public class DiscordService {
     }
 
     @Tool(name = "read_messages", description = "Read recent message history from a specific channel")
-    public String readMessageFromDiscordChannel(@ToolParam(description = "Discord channel ID") String channelId,
-                                                @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
+    public String readMessages(@ToolParam(description = "Discord channel ID") String channelId,
+                               @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
         if (channelId == null || channelId.isEmpty()) {
             throw new IllegalArgumentException("channelId cannot be null");
         }
@@ -117,16 +115,14 @@ public class DiscordService {
         if (textChannelById == null) {
             throw new IllegalArgumentException("Channel not found by channelId");
         }
-
         List<Message> messages = textChannelById.getHistory().retrievePast(limit).complete();
         List<String> formatedMessages = formatMessages(messages);
-
         return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
 
-    @Tool(name = "send_private_messages", description = "Send a private message to a specific user")
-    public String sendMessageToPrivateUser(@ToolParam(description = "Message content") String message,
-                                           @ToolParam(description = "Discord user ID") String userId) {
+    @Tool(name = "send_private_message", description = "Send a private message to a specific user")
+    public String sendPrivateMessage(@ToolParam(description = "Discord user ID") String userId,
+                                     @ToolParam(description = "Message content") String message) {
         if (userId == null || userId.isEmpty()) {
             throw new IllegalArgumentException("userId cannot be null");
         }
@@ -135,11 +131,9 @@ public class DiscordService {
         }
 
         User user = getUserById(userId);
-
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
-
         Message sentMessage = user.openPrivateChannel().complete().sendMessage(message).complete();
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
     }
@@ -170,9 +164,9 @@ public class DiscordService {
         return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
     }
 
-    @Tool(name = "read_private_message", description = "Read recent message history from a specific user")
-    public String readMessageFromPrivateUser(@ToolParam(description = "Discord user ID") String userId,
-                                             @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
+    @Tool(name = "read_private_messages", description = "Read recent message history from a specific user")
+    public String readPrivateMessages(@ToolParam(description = "Discord user ID") String userId,
+                                      @ToolParam(description = "Number of messages to retrieve", required = false) String count) {
         if (userId == null || userId.isEmpty()) {
             throw new IllegalArgumentException("userId cannot be null");
         }
@@ -185,10 +179,8 @@ public class DiscordService {
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
-
         List<Message> messages = user.openPrivateChannel().complete().getHistory().retrievePast(limit).complete();
         List<String> formatedMessages = formatMessages(messages);
-
         return "**Retrieved " + messages.size() + " messages:** \n" + String.join("\n", formatedMessages);
     }
 
@@ -235,7 +227,6 @@ public class DiscordService {
         if (message == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
-
         message.addReaction(Emoji.fromUnicode(emoji)).queue();
         return "Added reaction successfully. Message link: " + message.getJumpUrl();
     }
@@ -262,7 +253,6 @@ public class DiscordService {
         if (message == null) {
             throw new IllegalArgumentException("Message not found by messageId");
         }
-
         message.removeReaction(Emoji.fromUnicode(emoji)).queue();
         return "Added reaction successfully. Message link: " + message.getJumpUrl();
     }
@@ -275,13 +265,11 @@ public class DiscordService {
 
         List<TextChannel> textChannels;
         TextChannel channelById = jda.getTextChannelById(channelIdentifier);
-
         if (channelById != null) {
             textChannels = Collections.singletonList(channelById);
         } else {
             textChannels = jda.getTextChannelsByName(channelIdentifier, true);
         }
-
         if (textChannels.isEmpty()) {
             throw new IllegalArgumentException("Channel " + channelIdentifier + " not found");
         }
