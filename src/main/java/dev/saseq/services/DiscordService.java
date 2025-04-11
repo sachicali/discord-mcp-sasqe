@@ -2,6 +2,7 @@ package dev.saseq.services;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.springframework.ai.tool.annotation.Tool;
@@ -328,6 +329,75 @@ public class DiscordService {
         TextChannel responseTextChannel = textChannels.get(0);
         return "Retrieved " + responseTextChannel.getName() + " text channel, with ID " +
                 responseTextChannel.getId() + ". Link: " + responseTextChannel.getJumpUrl();
+    }
+
+    @Tool(name = "create_category", description = "Create a new category for channels")
+    public String createCategory(@ToolParam(description = "Discord server ID") String guildId,
+                                 @ToolParam(description = "Discord category name") String name) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        Category category = guild.createCategory(name).complete();
+        return "Created new category: " + category.getName();
+    }
+
+    @Tool(name = "delete_category", description = "Delete a category")
+    public String editCategory(@ToolParam(description = "Discord server ID") String guildId,
+                               @ToolParam(description = "Discord category ID") String categoryId) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (categoryId == null || categoryId.isEmpty()) {
+            throw new IllegalArgumentException("categoryId cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        Category category = guild.getCategoryById(categoryId);
+        if (category == null) {
+            throw new IllegalArgumentException("Category not found by categoryId");
+        }
+        category.delete().queue();
+        return "Deleted category: " + category.getName();
+    }
+
+    @Tool(name = "find_category", description = "Find a category ID using name and server ID")
+    public String findCategory(@ToolParam(description = "Discord server ID") String guildId,
+                               @ToolParam(description = "Discord category name") String categoryName) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (categoryName == null || categoryName.isEmpty()) {
+            throw new IllegalArgumentException("categoryName cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        List<Category> categories = guild.getCategoriesByName(categoryName, true);
+        if (categories.isEmpty()) {
+            throw new IllegalArgumentException("Category " + categoryName + " not found");
+        }
+        if (categories.size() > 1) {
+            String channelList = categories.stream()
+                    .map(c -> "**" + c.getName() + "** - `" + c.getId() + "`")
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Multiple channels found with name " + categoryName + ".\n" +
+                    "List: " + channelList + ".\nPlease specify the channel ID.");
+        }
+        Category category = categories.get(0);
+        return "Retrieved category: " + category.getName() + ", with ID: " + category.getId();
     }
 
     @Tool(name = "create_webhook", description = "Create a new webhook on a specific channel")

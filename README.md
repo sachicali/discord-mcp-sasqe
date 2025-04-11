@@ -80,6 +80,11 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 #### Channel Management
  - [`find_text_channel`](): Find a text channel (name or link) using an ID or name
 
+#### Category Management
+ - [`create_category`](): Create a new category for channels
+ - [`delete_category`](): Delete a category
+ - [`find_category`](): Find a category ID using name and server ID
+
 #### Webhook Management
  - [`create_webhook`](): Create a new webhook on a specific channel
  - [`delete_webhook`](): Delete a webhook
