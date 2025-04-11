@@ -350,7 +350,7 @@ public class DiscordService {
     }
 
     @Tool(name = "delete_category", description = "Delete a category")
-    public String editCategory(@ToolParam(description = "Discord server ID") String guildId,
+    public String deleteCategory(@ToolParam(description = "Discord server ID") String guildId,
                                @ToolParam(description = "Discord category ID") String categoryId) {
         if (guildId == null || guildId.isEmpty()) {
             throw new IllegalArgumentException("guildId cannot be null");
