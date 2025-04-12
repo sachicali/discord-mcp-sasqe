@@ -335,6 +335,26 @@ public class DiscordService {
         return "Retrieved " + channel.getType().name() + " channel: " + channel.getName() + " (ID: " + channel.getId() + ")";
     }
 
+    @Tool(name = "list_channels", description = "List of all channels")
+    public String listChannels(@ToolParam(description = "Discord server ID") String guildId) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        List<GuildChannel> channels = guild.getChannels();
+        if (channels.isEmpty()) {
+            throw new IllegalArgumentException("No channels found by guildId");
+        }
+        return "Retrieved " + channels.size() + " channels:\n" +
+                channels.stream()
+                        .map(c -> "- " + c.getType().name() + " channel: " + c.getName() + " (ID: " + c.getId() + ")")
+                        .collect(Collectors.joining("\n"));
+    }
+
     @Tool(name = "create_category", description = "Create a new category for channels")
     public String createCategory(@ToolParam(description = "Discord server ID") String guildId,
                                  @ToolParam(description = "Discord category name") String name) {

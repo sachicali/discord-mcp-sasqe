@@ -79,6 +79,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 #### Channel Management
  - [`find_channel`](): Find a channel type and ID using name and server ID
+ - [`list_channels`](): List of all channels
 
 #### Category Management
  - [`create_category`](): Create a new category for channels
