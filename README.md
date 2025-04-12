@@ -78,7 +78,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`remove_reaction`](): Remove a specified reaction (emoji) from a message
 
 #### Channel Management
- - [`find_text_channel`](): Find a text channel (name or link) using an ID or name
+ - [`find_channel`](): Find a channel type and ID using name and server ID
 
 #### Category Management
  - [`create_category`](): Create a new category for channels

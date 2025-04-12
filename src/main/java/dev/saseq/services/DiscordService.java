@@ -303,33 +303,36 @@ public class DiscordService {
         return "Added reaction successfully. Message link: " + message.getJumpUrl();
     }
 
-    @Tool(name = "find_text_channel", description = "Find a text channel (name or link) using an ID or name")
-    public String findTextChannel(@ToolParam(description = "Discord channel identifier (ID or Name)") String channelIdentifier) {
-        if (channelIdentifier == null || channelIdentifier.isEmpty()) {
-            throw new IllegalArgumentException("channelIdentifier cannot be null");
+    @Tool(name = "find_channel", description = "Find a channel type and ID using name and server ID")
+    public String findChannel(@ToolParam(description = "Discord server ID") String guildId,
+                              @ToolParam(description = "Discord category name") String channelName) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (channelName == null || channelName.isEmpty()) {
+            throw new IllegalArgumentException("channelName cannot be null");
         }
 
-        List<TextChannel> textChannels;
-        TextChannel channelById = jda.getTextChannelById(channelIdentifier);
-        if (channelById != null) {
-            textChannels = Collections.singletonList(channelById);
-        } else {
-            textChannels = jda.getTextChannelsByName(channelIdentifier, true);
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
         }
-        if (textChannels.isEmpty()) {
-            throw new IllegalArgumentException("Channel " + channelIdentifier + " not found");
+        List<GuildChannel> channels = guild.getChannels();
+        if (channels.isEmpty()) {
+            throw new IllegalArgumentException("No channels found by guildId");
         }
-        if (textChannels.size() > 1) {
-            String channelList = textChannels.stream()
-                    .map(c -> "**" + c.getName() + "** - `" + c.getId() + "`")
-                    .collect(Collectors.joining(", "));
-            throw new IllegalArgumentException("Multiple channels found with name " + channelIdentifier + ".\n" +
-                    "List: " + channelList + ".\nPlease specify the channel ID.");
+        List<GuildChannel> filteredChannels = channels.stream().filter(c -> c.getName().equalsIgnoreCase(channelName)).toList();
+        if (filteredChannels.isEmpty()) {
+            throw new IllegalArgumentException("No channels found with name " + channelName);
         }
-
-        TextChannel responseTextChannel = textChannels.get(0);
-        return "Retrieved " + responseTextChannel.getName() + " text channel, with ID " +
-                responseTextChannel.getId() + ". Link: " + responseTextChannel.getJumpUrl();
+        if (filteredChannels.size() > 1) {
+            return "Retrieved " + channels.size() + " channels:\n" +
+                    channels.stream()
+                            .map(c -> "- " + c.getType().name() + " channel: " + c.getName() + " (ID: " + c.getId() + ")")
+                            .collect(Collectors.joining("\n"));
+        }
+        GuildChannel channel = filteredChannels.get(0);
+        return "Retrieved " + channel.getType().name() + " channel: " + channel.getName() + " (ID: " + channel.getId() + ")";
     }
 
     @Tool(name = "create_category", description = "Create a new category for channels")
