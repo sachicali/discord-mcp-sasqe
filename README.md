@@ -84,6 +84,7 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
  - [`create_category`](): Create a new category for channels
  - [`delete_category`](): Delete a category
  - [`find_category`](): Find a category ID using name and server ID
+ - [`list_channels_in_category`](): List of channels in a specific category
 
 #### Webhook Management
  - [`create_webhook`](): Create a new webhook on a specific channel

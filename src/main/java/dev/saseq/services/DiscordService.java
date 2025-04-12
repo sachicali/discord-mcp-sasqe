@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
@@ -398,6 +399,33 @@ public class DiscordService {
         }
         Category category = categories.get(0);
         return "Retrieved category: " + category.getName() + ", with ID: " + category.getId();
+    }
+
+    @Tool(name = "list_channels_in_category", description = "List of channels in a specific category")
+    public String listChannelsInCategory(@ToolParam(description = "Discord server ID") String guildId,
+                                         @ToolParam(description = "Discord category ID") String categoryId) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (categoryId == null || categoryId.isEmpty()) {
+            throw new IllegalArgumentException("categoryId cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        Category category = guild.getCategoryById(categoryId);
+        if (category == null) {
+            throw new IllegalArgumentException("Category not found by categoryId");
+        }
+        List<GuildChannel> channels = category.getChannels();
+        if (channels.isEmpty()) {
+            throw new IllegalArgumentException("Category not contains any channels");
+        }
+        return channels.stream()
+                .map(c -> "- " + c.getType().name() + " channel: " + c.getName() + " (ID: " + c.getId() + ")")
+                .collect(Collectors.joining("\n"));
     }
 
     @Tool(name = "create_webhook", description = "Create a new webhook on a specific channel")
