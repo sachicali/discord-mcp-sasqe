@@ -423,9 +423,10 @@ public class DiscordService {
         if (channels.isEmpty()) {
             throw new IllegalArgumentException("Category not contains any channels");
         }
-        return channels.stream()
-                .map(c -> "- " + c.getType().name() + " channel: " + c.getName() + " (ID: " + c.getId() + ")")
-                .collect(Collectors.joining("\n"));
+        return "Retrieved " + channels.size() + " channels:\n" +
+                channels.stream()
+                        .map(c -> "- " + c.getType().name() + " channel: " + c.getName() + " (ID: " + c.getId() + ")")
+                        .collect(Collectors.joining("\n"));
     }
 
     @Tool(name = "create_webhook", description = "Create a new webhook on a specific channel")
