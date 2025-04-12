@@ -303,6 +303,28 @@ public class DiscordService {
         return "Added reaction successfully. Message link: " + message.getJumpUrl();
     }
 
+    @Tool(name = "delete_channel", description = "Delete a channel")
+    public String deleteChannel(@ToolParam(description = "Discord server ID") String guildId,
+                                @ToolParam(description = "Discord server ID") String channelId) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (channelId == null || channelId.isEmpty()) {
+            throw new IllegalArgumentException("channelId cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        GuildChannel channel = guild.getGuildChannelById(channelId);
+        if (channel == null) {
+            throw new IllegalArgumentException("Channel not found by channelId");
+        }
+        channel.delete().queue();
+        return "Deleted " + channel.getType().name() + " channel: " + channel.getName();
+    }
+
     @Tool(name = "find_channel", description = "Find a channel type and ID using name and server ID")
     public String findChannel(@ToolParam(description = "Discord server ID") String guildId,
                               @ToolParam(description = "Discord category name") String channelName) {
