@@ -325,6 +325,36 @@ public class DiscordService {
         return "Deleted " + channel.getType().name() + " channel: " + channel.getName();
     }
 
+    @Tool(name = "create_text_channel", description = "Create a new text channel")
+    public String createTextChannel(@ToolParam(description = "Discord server ID") String guildId,
+                                    @ToolParam(description = "Channel name") String name,
+                                    @ToolParam(description = "Category ID (optional)", required = false) String categoryId) {
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("name cannot be null");
+        }
+
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        
+        TextChannel textChannel;
+        if (categoryId != null && !categoryId.isEmpty()) {
+            Category category = guild.getCategoryById(categoryId);
+            if (category == null) {
+                throw new IllegalArgumentException("Category not found by categoryId");
+            }
+            textChannel = category.createTextChannel(name).complete();
+            return "Created new text channel: " + textChannel.getName() + " (ID: " + textChannel.getId() + ") in category: " + category.getName();
+        } else {
+            textChannel = guild.createTextChannel(name).complete();
+            return "Created new text channel: " + textChannel.getName() + " (ID: " + textChannel.getId() + ")";
+        }
+    }
+
     @Tool(name = "find_channel", description = "Find a channel type and ID using name and server ID")
     public String findChannel(@ToolParam(description = "Discord server ID") String guildId,
                               @ToolParam(description = "Discord category name") String channelName) {
