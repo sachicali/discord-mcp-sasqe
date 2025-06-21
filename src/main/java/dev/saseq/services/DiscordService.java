@@ -34,7 +34,7 @@ public class DiscordService {
     }
 
     @Tool(name = "get_server_info", description = "Get detailed discord server information")
-    public String getServerInfo(@ToolParam(description = "Discord server ID") String guildId) {
+    public String getServerInfo(@ToolParam(description = "Discord server ID", required = false) String guildId) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
             throw new IllegalArgumentException("Discord server ID cannot be null");
@@ -315,8 +315,8 @@ public class DiscordService {
     }
 
     @Tool(name = "delete_channel", description = "Delete a channel")
-    public String deleteChannel(@ToolParam(description = "Discord server ID") String guildId,
-                                @ToolParam(description = "Discord server ID") String channelId) {
+    public String deleteChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
+                                @ToolParam(description = "Discord channel ID") String channelId) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
             throw new IllegalArgumentException("guildId cannot be null");
@@ -338,7 +338,7 @@ public class DiscordService {
     }
 
     @Tool(name = "create_text_channel", description = "Create a new text channel")
-    public String createTextChannel(@ToolParam(description = "Discord server ID") String guildId,
+    public String createTextChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                     @ToolParam(description = "Channel name") String name,
                                     @ToolParam(description = "Category ID (optional)", required = false) String categoryId) {
         guildId = resolveGuildId(guildId);
@@ -369,7 +369,7 @@ public class DiscordService {
     }
 
     @Tool(name = "find_channel", description = "Find a channel type and ID using name and server ID")
-    public String findChannel(@ToolParam(description = "Discord server ID") String guildId,
+    public String findChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
                               @ToolParam(description = "Discord category name") String channelName) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
@@ -402,7 +402,7 @@ public class DiscordService {
     }
 
     @Tool(name = "list_channels", description = "List of all channels")
-    public String listChannels(@ToolParam(description = "Discord server ID") String guildId) {
+    public String listChannels(@ToolParam(description = "Discord server ID", required = false) String guildId) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
             throw new IllegalArgumentException("guildId cannot be null");
@@ -423,7 +423,7 @@ public class DiscordService {
     }
 
     @Tool(name = "create_category", description = "Create a new category for channels")
-    public String createCategory(@ToolParam(description = "Discord server ID") String guildId,
+    public String createCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                  @ToolParam(description = "Discord category name") String name) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
@@ -442,7 +442,7 @@ public class DiscordService {
     }
 
     @Tool(name = "delete_category", description = "Delete a category")
-    public String deleteCategory(@ToolParam(description = "Discord server ID") String guildId,
+    public String deleteCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                @ToolParam(description = "Discord category ID") String categoryId) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
@@ -465,7 +465,7 @@ public class DiscordService {
     }
 
     @Tool(name = "find_category", description = "Find a category ID using name and server ID")
-    public String findCategory(@ToolParam(description = "Discord server ID") String guildId,
+    public String findCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                @ToolParam(description = "Discord category name") String categoryName) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {
@@ -495,7 +495,7 @@ public class DiscordService {
     }
 
     @Tool(name = "list_channels_in_category", description = "List of channels in a specific category")
-    public String listChannelsInCategory(@ToolParam(description = "Discord server ID") String guildId,
+    public String listChannelsInCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                          @ToolParam(description = "Discord category ID") String categoryId) {
         guildId = resolveGuildId(guildId);
         if (guildId == null || guildId.isEmpty()) {

@@ -63,7 +63,7 @@ The Discord MPC server can be configured by adding the following to your configu
   }
 }
 ```
-The `DISCORD_GUILD_ID` environment variable is optional. When provided, it sets a default Discord server ID so tool calls don't require the `guildId` parameter.
+The `DISCORD_GUILD_ID` environment variable is optional. When provided, it sets a default Discord server ID so any tool that accepts a `guildId` parameter can omit it.
 
 
 ## 🔧 GitMCP
@@ -99,6 +99,8 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 
 ## 🛠️ Available Tools
+
+If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all tools below.
 
 #### Server Information
  - [`get_server_info`](): Get detailed discord server information
