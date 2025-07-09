@@ -110,6 +110,7 @@ If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all t
  - [`edit_message`](): Edit a message from a specific channel
  - [`delete_message`](): Delete a message from a specific channel
  - [`read_messages`](): Read recent message history from a specific channel
+ - [`get_user_id_by_name`](): Get a Discord user's ID by username in a guild for ping usage `<@id>`
  - [`send_private_message`](): Send a private message to a specific user
  - [`edit_private_message`](): Edit a private message from a specific user
  - [`delete_private_message`](): Delete a private message from a specific user

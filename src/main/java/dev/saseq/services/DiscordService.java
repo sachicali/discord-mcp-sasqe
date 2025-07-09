@@ -33,6 +33,53 @@ public class DiscordService {
         return guildId;
     }
 
+    /**
+     * Public tool to retrieve a Discord user's ID by their username (optionally with discriminator) in a guild.
+     * @param username Username (optionally in the format username#discriminator)
+     * @param guildId Optional guild/server ID; uses default if not provided
+     * @return User ID string if found, or error message
+     */
+    @Tool(name = "get_user_id_by_name", description = "Get a Discord user's ID by username in a guild for ping usage <@id>.")
+    public String getUserIdByName(
+            @ToolParam(description = "Discord username (optionally username#discriminator)") String username,
+            @ToolParam(description = "Discord server ID", required = false) String guildId) {
+        if (username == null || username.isEmpty()) {
+            throw new IllegalArgumentException("username cannot be null");
+        }
+        guildId = resolveGuildId(guildId);
+        if (guildId == null || guildId.isEmpty()) {
+            throw new IllegalArgumentException("guildId cannot be null");
+        }
+        Guild guild = jda.getGuildById(guildId);
+        if (guild == null) {
+            throw new IllegalArgumentException("Discord server not found by guildId");
+        }
+        String name = username;
+        String discriminatorLocal = null;
+        if (username.contains("#")) {
+            int idx = username.lastIndexOf('#');
+            name = username.substring(0, idx);
+            discriminatorLocal = username.substring(idx + 1);
+        }
+        List<Member> members = guild.getMemberCache().getElementsByUsername(name, true);
+        if (discriminatorLocal != null) {
+            final String finalDiscriminator = discriminatorLocal;
+            members = members.stream()
+                    .filter(m -> m.getUser().getDiscriminator().equals(finalDiscriminator))
+                    .toList();
+        }
+        if (members.isEmpty()) {
+            throw new IllegalArgumentException("No user found with username " + username);
+        }
+        if (members.size() > 1) {
+            String userList = members.stream()
+                    .map(m -> m.getUser().getName() + "#" + m.getUser().getDiscriminator() + " (ID: " + m.getUser().getId() + ")")
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException("Multiple users found with username '" + username + "'. List: " + userList + ". Please specify the full username#discriminator.");
+        }
+        return members.get(0).getUser().getId();
+    }
+
     @Tool(name = "get_server_info", description = "Get detailed discord server information")
     public String getServerInfo(@ToolParam(description = "Discord server ID", required = false) String guildId) {
         guildId = resolveGuildId(guildId);
