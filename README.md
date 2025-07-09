@@ -56,12 +56,14 @@ The Discord MPC server can be configured by adding the following to your configu
         "/absolute/path/to/discord-mcp-0.0.1-SNAPSHOT.jar"
       ],
       "env": {
-        "DISCORD_TOKEN": "YOUR_DISCORD_BOT_TOKEN"
+        "DISCORD_TOKEN": "YOUR_DISCORD_BOT_TOKEN",
+        "DISCORD_GUILD_ID": "OPTIONAL_DEFAULT_SERVER_ID"
       }
     }
   }
 }
 ```
+The `DISCORD_GUILD_ID` environment variable is optional. When provided, it sets a default Discord server ID so any tool that accepts a `guildId` parameter can omit it.
 
 
 ## 🔧 GitMCP
@@ -77,12 +79,14 @@ Use Discord MCP remotely via [GitMCP](https://gitmcp.io/):
         "https://gitmcp.io/SaseQ/discord-mcp"
       ],
       "env": {
-        "DISCORD_TOKEN": "YOUR_DISCORD_BOT_TOKEN"
+        "DISCORD_TOKEN": "YOUR_DISCORD_BOT_TOKEN",
+        "DISCORD_GUILD_ID": "OPTIONAL_DEFAULT_SERVER_ID"
       }
     }
   }
 }
 ```
+Set `DISCORD_GUILD_ID` here as well if you want to automatically target a specific server.
 More info and different configs [here](https://gitmcp.io/SaseQ/discord-mcp)
 
 
@@ -95,6 +99,8 @@ npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
 
 
 ## 🛠️ Available Tools
+
+If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all tools below.
 
 #### Server Information
  - [`get_server_info`](): Get detailed discord server information
