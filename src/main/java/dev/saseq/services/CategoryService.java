@@ -31,6 +31,13 @@ public class CategoryService {
         return guildId;
     }
 
+    /**
+     * Creates a new channel category in a specified Discord server.
+     *
+     * @param guildId Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param name    The name for the new category.
+     * @return A confirmation message with the name of the created category.
+     */
     @Tool(name = "create_category", description = "Create a new category for channels")
     public String createCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                  @ToolParam(description = "Discord category name") String name) {
@@ -50,6 +57,13 @@ public class CategoryService {
         return "Created new category: " + category.getName();
     }
 
+    /**
+     * Deletes a specified channel category from a Discord server.
+     *
+     * @param guildId    Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param categoryId The ID of the category to be deleted.
+     * @return A confirmation message with the name of the deleted category.
+     */
     @Tool(name = "delete_category", description = "Delete a category")
     public String deleteCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                  @ToolParam(description = "Discord category ID") String categoryId) {
@@ -73,6 +87,13 @@ public class CategoryService {
         return "Deleted category: " + category.getName();
     }
 
+    /**
+     * Finds a channel category by its name within a specified Discord server and returns its ID.
+     *
+     * @param guildId      Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param categoryName The name of the category to find.
+     * @return A message containing the name and ID of the found category.
+     */
     @Tool(name = "find_category", description = "Find a category ID using name and server ID")
     public String findCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                @ToolParam(description = "Discord category name") String categoryName) {
@@ -103,6 +124,13 @@ public class CategoryService {
         return "Retrieved category: " + category.getName() + ", with ID: " + category.getId();
     }
 
+    /**
+     * Lists all channels within a specified category in a Discord server.
+     *
+     * @param guildId    Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param categoryId The ID of the category from which to list channels.
+     * @return A formatted string listing the channels in the category, including their type, name, and ID.
+     */
     @Tool(name = "list_channels_in_category", description = "List of channels in a specific category")
     public String listChannelsInCategory(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                          @ToolParam(description = "Discord category ID") String categoryId) {

@@ -33,6 +33,12 @@ public class UserService {
         return guildId;
     }
 
+    /**
+     * Public tool to retrieve a Discord user's ID by their username (optionally with discriminator) in a guild.
+     * @param username Username (optionally in the format username#discriminator)
+     * @param guildId Optional guild/server ID; uses default if not provided
+     * @return User ID string if found, or error message
+     */
     @Tool(name = "get_user_id_by_name", description = "Get a Discord user's ID by username in a guild for ping usage <@id>.")
     public String getUserIdByName(
             @ToolParam(description = "Discord username (optionally username#discriminator)") String username,
@@ -74,6 +80,13 @@ public class UserService {
         return members.get(0).getUser().getId();
     }
 
+    /**
+     * Sends a private message to a specified Discord user.
+     *
+     * @param userId  The ID of the user to whom the private message will be sent.
+     * @param message The content of the private message.
+     * @return A confirmation message with a link to the sent message.
+     */
     @Tool(name = "send_private_message", description = "Send a private message to a specific user")
     public String sendPrivateMessage(@ToolParam(description = "Discord user ID") String userId,
                                      @ToolParam(description = "Message content") String message) {
@@ -92,6 +105,14 @@ public class UserService {
         return "Message sent successfully. Message link: " + sentMessage.getJumpUrl();
     }
 
+    /**
+     * Edits a private message sent to a specified Discord user.
+     *
+     * @param userId     The ID of the user to whom the private message was sent.
+     * @param messageId  The ID of the message to be edited.
+     * @param newMessage The new content for the message.
+     * @return A confirmation message with a link to the edited message.
+     */
     @Tool(name = "edit_private_message", description = "Edit a private message from a specific user")
     public String editPrivateMessage(@ToolParam(description = "Discord user ID") String userId,
                                      @ToolParam(description = "Specific message ID") String messageId,
@@ -118,6 +139,13 @@ public class UserService {
         return "Message edited successfully. Message link: " + editedMessage.getJumpUrl();
     }
 
+    /**
+     * Deletes a private message sent to a specified Discord user.
+     *
+     * @param userId    The ID of the user to whom the private message was sent.
+     * @param messageId The ID of the message to be deleted.
+     * @return A confirmation message indicating the message was deleted successfully.
+     */
     @Tool(name = "delete_private_message", description = "Delete a private message from a specific user")
     public String deletePrivateMessage(@ToolParam(description = "Discord user ID") String userId,
                                        @ToolParam(description = "Specific message ID") String messageId) {
@@ -140,6 +168,13 @@ public class UserService {
         return "Message deleted successfully";
     }
 
+    /**
+     * Reads the recent private message history from a specified Discord user.
+     *
+     * @param userId The ID of the user from whom to read the private messages.
+     * @param count  Optional number of messages to retrieve (default is 100).
+     * @return A formatted string containing the retrieved private messages.
+     */
     @Tool(name = "read_private_messages", description = "Read recent message history from a specific user")
     public String readPrivateMessages(@ToolParam(description = "Discord user ID") String userId,
                                       @ToolParam(description = "Number of messages to retrieve", required = false) String count) {

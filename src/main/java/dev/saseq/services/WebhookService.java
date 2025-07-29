@@ -21,6 +21,13 @@ public class WebhookService {
         this.jda = jda;
     }
 
+    /**
+     * Creates a new webhook for a specified Discord channel.
+     *
+     * @param channelId The ID of the channel where the webhook will be created.
+     * @param name      The name for the new webhook.
+     * @return A confirmation message with the URL of the created webhook.
+     */
     @Tool(name = "create_webhook", description = "Create a new webhook on a specific channel")
     public String createWebhook(@ToolParam(description = "Discord channel ID") String channelId,
                                 @ToolParam(description = "Webhook name") String name) {
@@ -39,6 +46,12 @@ public class WebhookService {
         return "Created " + name + " webhook: " + webhook.getUrl();
     }
 
+    /**
+     * Deletes a specified webhook.
+     *
+     * @param webhookId The ID of the webhook to be deleted.
+     * @return A confirmation message with the name of the deleted webhook.
+     */
     @Tool(name = "delete_webhook", description = "Delete a webhook")
     public String deleteWebhook(@ToolParam(description = "Discord webhook ID") String webhookId) {
         if (webhookId == null || webhookId.isEmpty()) {
@@ -53,6 +66,12 @@ public class WebhookService {
         return "Deleted " + webhook.getName() + " webhook";
     }
 
+    /**
+     * Lists all webhooks for a specified Discord channel.
+     *
+     * @param channelId The ID of the channel from which to list webhooks.
+     * @return A formatted string listing the webhooks, including their ID, name, and URL.
+     */
     @Tool(name = "list_webhooks", description = "List of webhooks on a specific channel")
     public String listWebhooks(@ToolParam(description = "Discord channel ID") String channelId) {
         if (channelId == null || channelId.isEmpty()) {
@@ -77,6 +96,13 @@ public class WebhookService {
                 .toList();
     }
 
+    /**
+     * Sends a message to a Discord channel using a webhook.
+     *
+     * @param webhookUrl The URL of the webhook to use for sending the message.
+     * @param message    The content of the message to be sent.
+     * @return A confirmation message with a link to the sent message.
+     */
     @Tool(name = "send_webhook_message", description = "Send a message via webhook")
     public String sendWebhookMessage(@ToolParam(description = "Discord webhook link") String webhookUrl,
                                      @ToolParam(description = "Message content") String message) {

@@ -32,6 +32,13 @@ public class ChannelService {
         return guildId;
     }
 
+    /**
+     * Deletes a channel in a specified Discord server.
+     *
+     * @param guildId   Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param channelId The ID of the channel to be deleted.
+     * @return A confirmation message with the name and type of the deleted channel.
+     */
     @Tool(name = "delete_channel", description = "Delete a channel")
     public String deleteChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                 @ToolParam(description = "Discord channel ID") String channelId) {
@@ -55,6 +62,14 @@ public class ChannelService {
         return "Deleted " + channel.getType().name() + " channel: " + channel.getName();
     }
 
+    /**
+     * Creates a new text channel in a specified Discord server.
+     *
+     * @param guildId    Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param name       The name for the new text channel.
+     * @param categoryId Optional ID of the category to which the new channel should be added.
+     * @return A confirmation message with the name and ID of the created channel, and category if specified.
+     */
     @Tool(name = "create_text_channel", description = "Create a new text channel")
     public String createTextChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
                                     @ToolParam(description = "Channel name") String name,
@@ -86,6 +101,13 @@ public class ChannelService {
         }
     }
 
+    /**
+     * Finds a channel by its name within a specified Discord server and returns its type and ID.
+     *
+     * @param guildId     Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @param channelName The name of the channel to find.
+     * @return A message containing the type, name, and ID of the found channel. If multiple channels are found, it returns a list of them.
+     */
     @Tool(name = "find_channel", description = "Find a channel type and ID using name and server ID")
     public String findChannel(@ToolParam(description = "Discord server ID", required = false) String guildId,
                               @ToolParam(description = "Discord category name") String channelName) {
@@ -119,6 +141,12 @@ public class ChannelService {
         return "Retrieved " + channel.getType().name() + " channel: " + channel.getName() + " (ID: " + channel.getId() + ")";
     }
 
+    /**
+     * Lists all channels in a specified Discord server.
+     *
+     * @param guildId Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @return A formatted string listing all channels in the server, including their type, name, and ID.
+     */
     @Tool(name = "list_channels", description = "List of all channels")
     public String listChannels(@ToolParam(description = "Discord server ID", required = false) String guildId) {
         guildId = resolveGuildId(guildId);

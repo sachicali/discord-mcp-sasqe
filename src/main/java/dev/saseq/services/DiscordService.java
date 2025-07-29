@@ -27,6 +27,12 @@ public class DiscordService {
         return guildId;
     }
 
+    /**
+     * Retrieves detailed information about a specified Discord server.
+     *
+     * @param guildId Optional ID of the Discord server (guild). If not provided, the default server will be used.
+     * @return A formatted string containing server details, including name, ID, owner, creation date, member count, channel counts, and boost status.
+     */
     @Tool(name = "get_server_info", description = "Get detailed discord server information")
     public String getServerInfo(@ToolParam(description = "Discord server ID", required = false) String guildId) {
         guildId = resolveGuildId(guildId);
