@@ -286,7 +286,7 @@ public class ForumService {
             throw new IllegalArgumentException("Forum channel already has maximum number of tags (20)");
         }
 
-        ForumTagData newTag = ForumTagData.of(tagName);
+        ForumTagData newTag = new ForumTagData(tagName);
         if ("true".equalsIgnoreCase(moderated)) {
             newTag = newTag.setModerated(true);
         }
