@@ -1,5 +1,6 @@
 package dev.saseq.services;
 
+import dev.saseq.configs.LazyJDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,13 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DiscordService {
 
-    private final JDA jda;
+    private final LazyJDAProvider jdaProvider;
 
     @Value("${DISCORD_GUILD_ID:}")
     private String defaultGuildId;
 
-    public DiscordService(JDA jda) {
-        this.jda = jda;
+    public DiscordService(LazyJDAProvider jdaProvider) {
+        this.jdaProvider = jdaProvider;
     }
 
     private String resolveGuildId(String guildId) {
@@ -40,7 +41,7 @@ public class DiscordService {
             throw new IllegalArgumentException("Discord server ID cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }

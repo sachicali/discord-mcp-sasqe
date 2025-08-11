@@ -1,5 +1,6 @@
 package dev.saseq.services;
 
+import dev.saseq.configs.LazyJDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.Message;
@@ -15,10 +16,10 @@ import java.util.List;
 @Service
 public class WebhookService {
 
-    private final JDA jda;
+    private final LazyJDAProvider jdaProvider;
 
-    public WebhookService(JDA jda) {
-        this.jda = jda;
+    public WebhookService(LazyJDAProvider jdaProvider) {
+        this.jdaProvider = jdaProvider;
     }
 
     /**
@@ -38,7 +39,7 @@ public class WebhookService {
             throw new IllegalArgumentException("webhook name cannot be null");
         }
 
-        TextChannel channelById = jda.getTextChannelById(channelId);
+        TextChannel channelById = jdaProvider.getJDA().getTextChannelById(channelId);
         if (channelById == null) {
             throw new IllegalArgumentException("Channel not found by channelId");
         }
@@ -78,7 +79,7 @@ public class WebhookService {
             throw new IllegalArgumentException("channelId cannot be null");
         }
 
-        TextChannel channelById = jda.getTextChannelById(channelId);
+        TextChannel channelById = jdaProvider.getJDA().getTextChannelById(channelId);
         if (channelById == null) {
             throw new IllegalArgumentException("Channel not found by channelId");
         }

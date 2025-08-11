@@ -1,5 +1,6 @@
 package dev.saseq.services;
 
+import dev.saseq.configs.LazyJDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -19,13 +20,13 @@ import java.util.stream.Collectors;
 @Service
 public class ThreadService {
 
-    private final JDA jda;
+    private final LazyJDAProvider jdaProvider;
 
     @Value("${DISCORD_GUILD_ID:}")
     private String defaultGuildId;
 
-    public ThreadService(JDA jda) {
-        this.jda = jda;
+    public ThreadService(LazyJDAProvider jdaProvider) {
+        this.jdaProvider = jdaProvider;
     }
 
     private String resolveGuildId(String guildId) {
@@ -56,7 +57,7 @@ public class ThreadService {
             throw new IllegalArgumentException("threadName cannot be null");
         }
 
-        TextChannel channel = jda.getTextChannelById(channelId);
+        TextChannel channel = jdaProvider.getJDA().getTextChannelById(channelId);
         if (channel == null) {
             throw new IllegalArgumentException("Text channel not found by channelId");
         }
@@ -105,7 +106,7 @@ public class ThreadService {
             throw new IllegalArgumentException("message cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
@@ -132,7 +133,7 @@ public class ThreadService {
             throw new IllegalArgumentException("archive cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
@@ -160,7 +161,7 @@ public class ThreadService {
             throw new IllegalArgumentException("lock cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
@@ -188,7 +189,7 @@ public class ThreadService {
             throw new IllegalArgumentException("pin cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
@@ -216,12 +217,12 @@ public class ThreadService {
             throw new IllegalArgumentException("userId cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
 
-        User user = jda.getUserById(userId);
+        User user = jdaProvider.getJDA().getUserById(userId);
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
@@ -247,12 +248,12 @@ public class ThreadService {
             throw new IllegalArgumentException("userId cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
 
-        User user = jda.getUserById(userId);
+        User user = jdaProvider.getJDA().getUserById(userId);
         if (user == null) {
             throw new IllegalArgumentException("User not found by userId");
         }
@@ -274,7 +275,7 @@ public class ThreadService {
             throw new IllegalArgumentException("guildId cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -321,7 +322,7 @@ public class ThreadService {
             throw new IllegalArgumentException("threadId cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }
@@ -366,7 +367,7 @@ public class ThreadService {
             throw new IllegalArgumentException("threadId cannot be null");
         }
 
-        ThreadChannel thread = jda.getThreadChannelById(threadId);
+        ThreadChannel thread = jdaProvider.getJDA().getThreadChannelById(threadId);
         if (thread == null) {
             throw new IllegalArgumentException("Thread not found by threadId");
         }

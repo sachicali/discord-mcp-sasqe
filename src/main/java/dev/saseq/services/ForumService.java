@@ -1,5 +1,6 @@
 package dev.saseq.services;
 
+import dev.saseq.configs.LazyJDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -23,13 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class ForumService {
 
-    private final JDA jda;
+    private final LazyJDAProvider jdaProvider;
 
     @Value("${DISCORD_GUILD_ID:}")
     private String defaultGuildId;
 
-    public ForumService(JDA jda) {
-        this.jda = jda;
+    public ForumService(LazyJDAProvider jdaProvider) {
+        this.jdaProvider = jdaProvider;
     }
 
     private String resolveGuildId(String guildId) {
@@ -61,7 +62,7 @@ public class ForumService {
             throw new IllegalArgumentException("name cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -109,7 +110,7 @@ public class ForumService {
             throw new IllegalArgumentException("content cannot be null");
         }
 
-        ForumChannel forum = jda.getForumChannelById(forumChannelId);
+        ForumChannel forum = jdaProvider.getJDA().getForumChannelById(forumChannelId);
         if (forum == null) {
             throw new IllegalArgumentException("Forum channel not found by forumChannelId");
         }
@@ -160,7 +161,7 @@ public class ForumService {
             throw new IllegalArgumentException("guildId cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -195,7 +196,7 @@ public class ForumService {
             throw new IllegalArgumentException("forumName cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -241,7 +242,7 @@ public class ForumService {
             throw new IllegalArgumentException("forumChannelId cannot be null");
         }
 
-        ForumChannel forum = jda.getForumChannelById(forumChannelId);
+        ForumChannel forum = jdaProvider.getJDA().getForumChannelById(forumChannelId);
         if (forum == null) {
             throw new IllegalArgumentException("Forum channel not found by forumChannelId");
         }
@@ -272,7 +273,7 @@ public class ForumService {
             throw new IllegalArgumentException("tagName cannot be null");
         }
 
-        ForumChannel forum = jda.getForumChannelById(forumChannelId);
+        ForumChannel forum = jdaProvider.getJDA().getForumChannelById(forumChannelId);
         if (forum == null) {
             throw new IllegalArgumentException("Forum channel not found by forumChannelId");
         }
@@ -309,7 +310,7 @@ public class ForumService {
             throw new IllegalArgumentException("forumChannelId cannot be null");
         }
 
-        ForumChannel forum = jda.getForumChannelById(forumChannelId);
+        ForumChannel forum = jdaProvider.getJDA().getForumChannelById(forumChannelId);
         if (forum == null) {
             throw new IllegalArgumentException("Forum channel not found by forumChannelId");
         }

@@ -40,21 +40,4 @@ public class DiscordMcpConfig {
         ).build();
     }
 
-    @Bean
-    @org.springframework.context.annotation.Lazy
-    public JDA jda(@Value("${DISCORD_TOKEN:}") String token) {
-        if (token == null || token.isEmpty()) {
-            System.err.println("ERROR: The environment variable DISCORD_TOKEN is not set. Please set it to run the application properly.");
-            System.exit(1);
-        }
-        try {
-            return JDABuilder.createDefault(token)
-                    .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                    .setAutoReconnect(true)
-                    .build();
-        } catch (Exception e) {
-            System.err.println("ERROR: Failed to initialize Discord JDA: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize Discord JDA", e);
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package dev.saseq.services;
 
+import dev.saseq.configs.LazyJDAProvider;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
 
-    private final JDA jda;
+    private final LazyJDAProvider jdaProvider;
 
     @Value("${DISCORD_GUILD_ID:}")
     private String defaultGuildId;
 
-    public CategoryService(JDA jda) {
-        this.jda = jda;
+    public CategoryService(LazyJDAProvider jdaProvider) {
+        this.jdaProvider = jdaProvider;
     }
 
     private String resolveGuildId(String guildId) {
@@ -49,7 +50,7 @@ public class CategoryService {
             throw new IllegalArgumentException("name cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -75,7 +76,7 @@ public class CategoryService {
             throw new IllegalArgumentException("categoryId cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -105,7 +106,7 @@ public class CategoryService {
             throw new IllegalArgumentException("categoryName cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
@@ -142,7 +143,7 @@ public class CategoryService {
             throw new IllegalArgumentException("categoryId cannot be null");
         }
 
-        Guild guild = jda.getGuildById(guildId);
+        Guild guild = jdaProvider.getJDA().getGuildById(guildId);
         if (guild == null) {
             throw new IllegalArgumentException("Discord server not found by guildId");
         }
