@@ -172,6 +172,27 @@ claude mcp add mcp-server -- docker run --rm -i -e DISCORD_TOKEN=<YOUR_DISCORD_B
  - [`find_category`](): Find a category ID using name and server ID
  - [`list_channels_in_category`](): List of channels in a specific category
 
+#### Forum Channel Management
+ - [`create_forum_channel`](): Create a new forum channel
+ - [`create_forum_post`](): Create a new post (thread) in a forum channel
+ - [`list_forum_channels`](): List all forum channels in a server
+ - [`find_forum_channel`](): Find a forum channel by name
+ - [`delete_forum_channel`](): Delete a forum channel
+ - [`add_forum_tag`](): Add a tag to a forum channel
+ - [`list_forum_threads`](): List all active threads in a forum channel
+
+#### Thread Management
+ - [`create_thread`](): Create a new thread in a text channel
+ - [`send_thread_message`](): Send a message to a thread
+ - [`archive_thread`](): Archive or unarchive a thread
+ - [`lock_thread`](): Lock or unlock a thread
+ - [`pin_thread`](): Pin or unpin a thread in a forum
+ - [`add_thread_member`](): Add a member to a thread
+ - [`remove_thread_member`](): Remove a member from a thread
+ - [`list_all_threads`](): List all active threads in a server
+ - [`get_thread_info`](): Get detailed information about a thread
+ - [`read_thread_messages`](): Read recent messages from a thread
+
 #### Webhook Management
  - [`create_webhook`](): Create a new webhook on a specific channel
  - [`delete_webhook`](): Delete a webhook
