@@ -28,6 +28,29 @@ Enable your AI assistants to seamlessly interact with Discord. Manage channels, 
 
 ## 🔬 Installation
 
+### ► 🐳 Docker Installation (Recommended)
+> NOTE: Docker installation is required. Full instructions can be found on [docker.com](https://www.docker.com/products/docker-desktop/).
+```json
+{
+  "mcpServers": {
+    "mcp-server": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-e", "DISCORD_TOKEN=<YOUR_DISCORD_BOT_TOKEN>",
+        "-e", "DISCORD_GUILD_ID=<OPTIONAL_DEFAULT_SERVER_ID>",
+        "saseq/discord-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
+<details>
+    <summary style="font-size: 1.35em; font-weight: bold;">
+        🔧 Manual Installation
+    </summary>
+
 #### Clone the repository
 ```bash
 git clone https://github.com/SaseQ/discord-mcp
@@ -65,42 +88,59 @@ The Discord MPC server can be configured by adding the following to your configu
 ```
 The `DISCORD_GUILD_ID` environment variable is optional. When provided, it sets a default Discord server ID so any tool that accepts a `guildId` parameter can omit it.
 
+</details>
 
-## 🔧 GitMCP
+<details>
+    <summary style="font-size: 1.35em; font-weight: bold;">
+        ⚓ Smithery Installation
+    </summary>
 
-Use Discord MCP remotely via [GitMCP](https://gitmcp.io/):
+Install Discord MCP Server automatically via [Smithery](https://smithery.ai/):
+```bash
+npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client <CLIENT_NAME> --key <YOUR_SMITHERY_KEY>
+```
+
+</details>
+
+<details>
+    <summary style="font-size: 1.35em; font-weight: bold;">
+        🖲 Cursor Installation
+    </summary>
+
+Go to: `Settings` -> `Cursor Settings` -> `MCP` -> `Add new global MCP server`
+
+Pasting the following configuration into your Cursor `~/.cursor/mcp.json` file is the recommended approach. You may also install in a specific project by creating `.cursor/mcp.json` in your project folder. See [Cursor MCP docs](https://docs.cursor.com/context/model-context-protocol) for more info.
 ```json
 {
   "mcpServers": {
-    "discord-mcp": {
-      "command": "npx",
+    "mcp-server": {
+      "command": "docker",
       "args": [
-        "mcp-remote",
-        "https://gitmcp.io/SaseQ/discord-mcp"
-      ],
-      "env": {
-        "DISCORD_TOKEN": "YOUR_DISCORD_BOT_TOKEN",
-        "DISCORD_GUILD_ID": "OPTIONAL_DEFAULT_SERVER_ID"
-      }
+        "run", "--rm", "-i",
+        "-e", "DISCORD_TOKEN=<YOUR_DISCORD_BOT_TOKEN>",
+        "-e", "DISCORD_GUILD_ID=<OPTIONAL_DEFAULT_SERVER_ID>",
+        "saseq/discord-mcp:latest"
+      ]
     }
   }
 }
 ```
-Set `DISCORD_GUILD_ID` here as well if you want to automatically target a specific server.
-More info and different configs [here](https://gitmcp.io/SaseQ/discord-mcp)
 
+</details>
 
-## ⚓ Smithery
+<details>
+    <summary style="font-size: 1.35em; font-weight: bold;">
+        ⌨️ Claude Code Installation
+    </summary>
 
-Install Discord MCP Server automatically via [Smithery](https://smithery.ai/):
+Run this command. See [Claude Code MCP docs](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/tutorials#set-up-model-context-protocol-mcp) for more info.
 ```bash
-npx -y @smithery/cli@latest install @SaseQ/discord-mcp --client claude
+claude mcp add mcp-server -- docker run --rm -i -e DISCORD_TOKEN=<YOUR_DISCORD_BOT_TOKEN> -e DISCORD_GUILD_ID=<OPTIONAL_DEFAULT_SERVER_ID> saseq/discord-mcp:latest
 ```
 
+</details>
 
 ## 🛠️ Available Tools
-
-If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all tools below.
 
 #### Server Information
  - [`get_server_info`](): Get detailed discord server information
@@ -138,6 +178,7 @@ If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all t
  - [`list_webhooks`](): List of webhooks on a specific channel
  - [`send_webhook_message`](): Send a message via webhook
 
+>If `DISCORD_GUILD_ID` is set, the `guildId` parameter becomes optional for all tools above.
 
 <hr>
 
