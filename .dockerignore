@@ -1,0 +1,45 @@
+# Git files
+.git
+.gitignore
+
+# Documentation
+README.md
+CLAUDE.md
+*.md
+
+# IDE files
+.idea
+.vscode
+*.iml
+
+# Build artifacts
+target/
+*.jar
+*.war
+*.ear
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files
+Dockerfile*
+docker-compose*
+
+# CI/CD
+.github/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Assets (if not needed in container)
+assets/
+
+# Build scripts
+build.bat
+build.sh
