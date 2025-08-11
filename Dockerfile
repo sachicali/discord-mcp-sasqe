@@ -14,7 +14,8 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 ENV DISCORD_TOKEN=""
+ENV DISCORD_GUILD_ID=""
 
-EXPOSE 8080
+EXPOSE 8085
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
