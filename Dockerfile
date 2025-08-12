@@ -6,8 +6,7 @@ WORKDIR /app
 COPY pom.xml .
 
 # Download all dependencies and plugins (cached unless pom.xml changes)
-RUN mvn dependency:go-offline dependency:resolve-sources \
-    dependency:download-sources \
+RUN mvn dependency:go-offline dependency:sources \
     -B -q
 
 FROM maven:3.9.6-amazoncorretto-17 AS build
