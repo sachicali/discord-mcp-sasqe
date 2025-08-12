@@ -6,10 +6,9 @@ WORKDIR /app
 COPY pom.xml .
 
 # Download all dependencies and plugins (cached unless pom.xml changes)
-RUN mvn dependency:resolve dependency:resolve-sources \
+RUN mvn dependency:go-offline dependency:resolve-sources \
     dependency:download-sources \
-    clean:clean compiler:compile \
-    -B -q --fail-never
+    -B -q
 
 FROM maven:3.9.6-amazoncorretto-17 AS build
 
@@ -23,9 +22,9 @@ COPY pom.xml .
 COPY src ./src
 
 # Fast build with pre-cached dependencies
-RUN mvn package -DskipTests -B -o \
-    -Dmaven.main.skip \
-    -Dspring-boot.repackage.skip=false \
+RUN mvn package -DskipTests -B -q \
+    -Dmaven.compile.fork=true \
+    -Dmaven.compiler.maxmem=1024m \
     -Dspring.profiles.active=docker
 
 FROM amazoncorretto:17-alpine
