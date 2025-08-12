@@ -59,7 +59,7 @@ public class WebhookService {
             throw new IllegalArgumentException("webhookId cannot be null");
         }
 
-        Webhook webhook = jda.retrieveWebhookById(webhookId).complete();
+        Webhook webhook = jdaProvider.getJDA().retrieveWebhookById(webhookId).complete();
         if (webhook == null) {
             throw new IllegalArgumentException("Webhook not found by webhookId");
         }
@@ -114,7 +114,7 @@ public class WebhookService {
             throw new IllegalArgumentException("message cannot be null");
         }
 
-        IncomingWebhookClient webhookClient = WebhookClient.createClient(jda, webhookUrl);
+        IncomingWebhookClient webhookClient = WebhookClient.createClient(jdaProvider.getJDA(), webhookUrl);
         if (webhookClient == null) {
             throw new IllegalArgumentException("Webhook not found by webhookUrl");
         }
